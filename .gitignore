@@ -1,0 +1,16 @@
+# Java/Maven
+target/
+*.log
+
+# IntelliJ
+.idea/
+*.iml
+
+# Node/Playwright
+node_modules/
+playwright-report/
+test-results/
+*.zip
+
+# Mac
+.DS_Store
