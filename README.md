@@ -1,138 +1,65 @@
-QA Automation – API y UI
-Descripción General
-
-Este repositorio contiene la automatización de pruebas para la aplicación Contact List disponible en:
-
+Reto de Automatización QA – Automatización UI y API
+1. Descripción del Proyecto
+Este proyecto contiene la solución de automatización para el reto técnico de QA. Incluye automatización End-to-End (UI) utilizando Playwright y automatización de API utilizando Serenity BDD con Gherkin.
+2. Stack Tecnológico
+•	Automatización UI: Playwright (JavaScript)
+•	Automatización API: Serenity BDD + Rest Assured
+•	Lenguaje BDD: Gherkin (Feature Files)
+•	Patrón de Diseño UI: Page Object Model (POM)
+•	Integración Continua: GitHub Actions
+3. Aplicación Bajo Prueba
+Aplicación Web:
 https://thinking-tester-contact-list.herokuapp.com/
-
-El proyecto está estructurado en dos componentes principales:
-
-Automatización de API utilizando Serenity BDD, RestAssured y Cucumber (Gherkin).
-
-Automatización de UI utilizando Playwright.
-
-El objetivo es validar de manera automatizada el flujo completo de autenticación y la gestión de contactos, cubriendo operaciones CRUD y escenarios positivos y negativos.
-
-Arquitectura del Proyecto
-
-El repositorio está organizado de la siguiente manera:
-
-qa-automation-contact-list/
+Documentación API:
+https://documenter.getpostman.com/view/4012288/TzK2bEa8
+4. Estructura del Proyecto
+UI Playwright/
 │
-├── API serenity/
-│   ├── src/test/java
-│   ├── src/test/resources
-│   └── pom.xml
+├── tests/
+├── pages/
+├── playwright.config.js
+├── package.json
 │
-├── UI Playwright/
+API Serenity/
 │
-└── README.md
-API serenity
+├── src/test/java/
+├── src/test/resources/features/
+├── pom.xml
+5. Prerrequisitos
+•	Node.js versión 18 o superior
+•	Java JDK 11 o superior
+•	Maven instalado
+•	Git
+6. Instalación del Proyecto
+UI (Playwright)
+npm install
+npx playwright install
+API (Serenity)
+mvn clean install
+7. Ejecución de Pruebas
+7.1 Ejecutar Pruebas UI
 
-Contiene la automatización de servicios REST utilizando:
-
-Java 17
-
-Maven
-
-Serenity BDD
-
-RestAssured
-
-Cucumber (Gherkin)
-
-JUnit
-
-La automatización ejecuta llamadas HTTP reales contra la API y valida:
-
-Registro de usuario
-
-Inicio de sesión y obtención de token
-
-Consulta de perfil autenticado
-
-Creación de contacto
-
-Consulta de contacto por ID
-
-Actualización de contacto
-
-Eliminación de contacto
-
-Escenarios negativos de autenticación
-
-Los reportes se generan automáticamente con Serenity.
-
-UI Playwright
-
-Contendrá la automatización de la interfaz gráfica utilizando:
-
-Playwright
-
-Node.js
-
-Cucumber (si se implementa con Gherkin)
-
-Este módulo validará el comportamiento del sistema desde la perspectiva del usuario final.
-
-Ejecución de Pruebas API
-
-Desde la carpeta API serenity ejecutar:
-
+npx playwright test --project=chromium --headed
+Abrir reporte HTML:
+npx playwright show-report
+7.2 Ejecutar Pruebas API
+Ejecutar pruebas Serenity:
 mvn clean verify
+Abrir reporte Serenity:
+open target/site/serenity/index.html
+8. Escenarios Automatizados
+UI:
+•	Login
+•	Crear Contacto
+•	Actualizar Contacto
+•	Eliminar Contacto
+•	Cerrar Sesión
+API:
+•	Autenticación
+•	Crear Contacto
+•	Consultar Contacto
+•	Actualizar Contacto
+•	Eliminar Contacto
+9. Observaciones
+La base de datos de la aplicación demo puede reiniciarse periódicamente, ya que se trata de un entorno de pruebas.
 
-Al finalizar la ejecución, el reporte estará disponible en:
-
-target/site/serenity/index.html
-
-Los reportes incluyen:
-
-Resumen de ejecución
-
-Resultado por escenario
-
-Evidencia de request y response
-
-Métricas de duración
-
-Cobertura funcional por feature
-
-Uso de Postman
-
-La documentación de la API se encuentra publicada en Postman Documenter.
-
-Postman fue utilizado únicamente como herramienta de referencia para:
-
-Analizar la estructura de los endpoints
-
-Verificar payloads
-
-Confirmar códigos de estado esperados
-
-La ejecución automatizada no depende de Postman y se realiza completamente mediante código.
-
-Buenas Prácticas Implementadas
-
-Uso de Gherkin para definición clara de escenarios
-
-Separación de responsabilidades mediante Step Definitions
-
-Manejo de sesión mediante variables compartidas
-
-Validaciones explícitas de status code y body
-
-Generación automática de datos dinámicos (UUID)
-
-Reportería profesional con Serenity
-
-Mejoras Futuras
-
-Externalizar la URL base en archivo de configuración
-
-Soporte para múltiples ambientes (dev, qa, prod)
-
-Integración con pipeline CI/CD
-
-Implementación de patrón de diseño más desacoplado
-
-Integración de pruebas UI con manejo de datos dinámicos
