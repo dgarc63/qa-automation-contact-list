@@ -11,7 +11,7 @@ module.exports = defineConfig({
 
   reporter: [
     ['list'],
-    ['html', { open: 'never', outputFolder: 'playwright-report' }],
+    ['html', { open: 'on', outputFolder: 'playwright-report' }],
   ],
 
   // Carpeta de evidencias (screenshots/videos/traces)

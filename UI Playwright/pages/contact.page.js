@@ -45,9 +45,8 @@ async openContactByEmail(email) {
   await row.click();
 }
   contactRow(fullName) {
-    return this.page.getByText(fullName, { exact: false });
+    return this.page.getByRole('cell', { name: fullName }).first();
   }
-
   async logout() {
     await this.logoutButton.click();
   }
