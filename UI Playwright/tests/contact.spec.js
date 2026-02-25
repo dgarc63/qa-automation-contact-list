@@ -32,11 +32,11 @@ test('CRUD contacto: crear, actualizar, eliminar y cerrar sesión', async ({ pag
   await expect(page.getByRole('button', { name: 'Add a New Contact' }))
     .toBeVisible({ timeout: 15000 });
 
+  // ===== CREATE =====
   await contact.addFullContact(contactData);
 
   const createdFullName = `${contactData.firstName} ${contactData.lastName}`;
-  await expect(contact.contactRow(createdFullName))
-    .toBeVisible({ timeout: 15000 });
+  await contact.waitForContact(createdFullName, 15000);
 
   // ===== UPDATE =====
   await updater.openContact(createdFullName);
@@ -48,18 +48,21 @@ test('CRUD contacto: crear, actualizar, eliminar y cerrar sesión', async ({ pag
 
   const updatedFullName = `${updatedFirstName} ${contactData.lastName}`;
 
-  // ✅ FIX clave
-  await page.reload({ waitUntil: 'domcontentloaded' });
+  // ✅ lista fresca + espera robusta
+  await page.goto('https://thinking-tester-contact-list.herokuapp.com/contactList', {
+    waitUntil: 'domcontentloaded',
+  });
 
-  await expect(contact.contactRow(updatedFullName))
-    .toBeVisible({ timeout: 15000 });
+  await contact.waitForContact(updatedFullName, 15000);
 
   // ===== DELETE =====
   await remover.openContact(updatedFullName);
   await remover.deleteContact();
 
-  // ✅ FIX clave
-  await page.reload({ waitUntil: 'domcontentloaded' });
+  // ✅ lista fresca antes de validar ausencia
+  await page.goto('https://thinking-tester-contact-list.herokuapp.com/contactList', {
+    waitUntil: 'domcontentloaded',
+  });
 
   await expect(contact.contactRow(updatedFullName))
     .toHaveCount(0, { timeout: 15000 });

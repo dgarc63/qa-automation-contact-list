@@ -1,3 +1,4 @@
+const { expect } = require('@playwright/test');
 class ContactPage {
   constructor(page) {
     this.page = page;
@@ -36,17 +37,42 @@ class ContactPage {
     await this.country.fill(data.country);
 
     await this.submitButton.click();
+
+    // ✅ estabiliza: vuelve a lista visible
+    await this.addButton.waitFor({ state: 'visible', timeout: 15000 });
   }
-// Abre un contacto por email (único)
-async openContactByEmail(email) {
-  // busca la fila que contiene ese email y hace click
-  const row = this.page.locator('tr').filter({ hasText: email }).first();
-  await row.waitFor({ state: 'visible', timeout: 15000 });
-  await row.click();
-}
+
+  // Abre un contacto por email (único)
+  async openContactByEmail(email) {
+    const row = this.contactRowByEmail(email);
+    await row.waitFor({ state: 'visible', timeout: 15000 });
+    await row.click();
+  }
+
+  // ✅ selector robusto por fila (NO por cell exacta)
   contactRow(fullName) {
-    return this.page.getByRole('cell', { name: fullName }).first();
+    const safe = fullName.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); // escape regex
+    return this.page.getByRole('row', { name: new RegExp(safe, 'i') }).first();
   }
+
+  // ✅ útil cuando el email es tu “id” único
+  contactRowByEmail(email) {
+    const safe = email.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    return this.page.getByRole('row', { name: new RegExp(safe, 'i') }).first();
+  }
+
+  // ✅ helper para esperar a que el contacto aparezca (evita flaky)
+  async waitForContact(fullName, timeout = 15000) {
+    const row = this.contactRow(fullName);
+    await expect
+      .poll(async () => await row.count(), {
+        timeout,
+        intervals: [300, 500, 800, 1200],
+      })
+      .toBeGreaterThan(0);
+    await row.waitFor({ state: 'visible', timeout });
+  }
+
   async logout() {
     await this.logoutButton.click();
   }
